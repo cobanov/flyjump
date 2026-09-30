@@ -3,7 +3,10 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createRunner } from "../src/lib/runner.ts";
 import {
+  CONTROLLERS,
   NETWORK,
+  decideDirect,
+  directInputs,
   forward,
   observation,
   validModel,
@@ -11,11 +14,11 @@ import {
 import { Connectome, CIRCUIT } from "../src/lib/connectome.ts";
 import { Trainer, episode, rng, randomWeights } from "../src/lib/training.ts";
 import { benchmark } from "../src/lib/benchmark.ts";
-const model = JSON.parse(
-  readFileSync(
-    new URL("../public/benchmarks/model.json", import.meta.url),
-    "utf8",
-  ),
+const read = (path) =>
+  JSON.parse(readFileSync(new URL(`../${path}`, import.meta.url), "utf8"));
+const model = read("public/benchmarks/model.json");
+const direct = ["8-12-3", "8-20-3"].map((shape) =>
+  read(`public/benchmarks/direct/${shape}/20260912/model.json`),
 );
 test("actual learned weights and hidden activations determine the selected score", () => {
   const weights = Array(NETWORK.parameters).fill(0);
@@ -64,8 +67,39 @@ test("every circuit edge points to real cells and output has a path from driven 
   for (const i of CIRCUIT.outputs)
     assert.ok(reached.has(i), `unreachable ${i}`);
 });
+test("direct controllers see the circuit's input encoding and no circuit state", () => {
+  for (const [kind, hidden] of [
+    ["direct-8-12-3", 12],
+    ["direct-8-20-3", 20],
+  ]) {
+    const shape = CONTROLLERS[kind];
+    assert.equal(shape.parameters, (8 + 1) * hidden + (hidden + 1) * 3);
+    assert.equal(randomWeights(rng(1), kind).length, shape.parameters);
+  }
+  assert.equal(CONTROLLERS["direct-8-20-3"].parameters, NETWORK.parameters);
+  // Input cells receive exactly this drive in connectome.ts.
+  const state = createRunner(),
+    input = observation(state),
+    brain = new Connectome();
+  brain.step(input);
+  for (const [cell, channel] of CIRCUIT.inputs)
+    assert.equal(directInputs(input)[channel], brain.drive[cell]);
+  const shape = CONTROLLERS["direct-8-12-3"],
+    weights = Array(shape.parameters).fill(0);
+  weights[0] = 1; // hidden 0 reads observation 0 (proximity)
+  weights[9 * 12 + 13] = 5; // Jump score reads hidden 0
+  const far = decideDirect(weights, state, shape);
+  assert.deepEqual(far.inputs, directInputs(far.observations));
+  assert.equal(far.action, 0);
+  state.obstacles.push({ x: 60, width: 20, height: 40, bottom: 0 });
+  assert.equal(decideDirect(weights, state, shape).action, 1);
+});
 test("malformed and incompatible checkpoints are rejected", () => {
   assert.ok(validModel(model));
+  assert.ok(validModel(direct[0], "direct-8-12-3"));
+  assert.ok(validModel(direct[1], "direct-8-20-3"));
+  assert.equal(validModel(direct[1]), false);
+  assert.equal(validModel(model, "direct-8-20-3"), false);
   for (const bad of [
     null,
     {},
@@ -85,6 +119,12 @@ test("seeded learning changes the search distribution through actual rollouts", 
   assert.equal(first.episodes, 196);
   assert.ok(a.mean.some((n) => n !== 0));
   assert.notDeepEqual(first.model.weights, original);
+  const d = new Trainer(42, "direct-8-12-3");
+  assert.deepEqual(d.champion.weights, randomWeights(rng(42), "direct-8-12-3"));
+  const directFirst = d.step();
+  assert.equal(directFirst.episodes, 196);
+  assert.equal(directFirst.model.version, CONTROLLERS["direct-8-12-3"].version);
+  assert.equal(directFirst.model.weights.length, 147);
 });
 test("published benchmark reproduces exactly against the shipped graph, checkpoint and Chromium", () => {
   const saved = JSON.parse(
@@ -93,7 +133,15 @@ test("published benchmark reproduces exactly against the shipped graph, checkpoi
       "utf8",
     ),
   );
-  const actual = benchmark(model);
+  const actual = benchmark(model, direct);
   assert.deepEqual(actual.results, saved.results);
-  assert.ok(actual.results[0].meanScore > actual.results[1].meanScore * 10);
+  const row = (name) => actual.results.find((r) => r.name === name);
+  assert.ok(
+    row("connectome + trained readout").meanScore >
+      row("circuit output zeroed").meanScore * 10,
+  );
+  // Zeroed output gives the readout one constant input, hence one constant action.
+  const zeroed = row("circuit output zeroed").runs.map((r) => r.actions);
+  assert.equal(new Set(zeroed.map((a) => a.findIndex((n) => n > 0))).size, 1);
+  assert.ok(zeroed.every((a) => a.filter((n) => n > 0).length === 1));
 });

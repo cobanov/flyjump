@@ -18,9 +18,19 @@ const controllerLabels: Record<string, { label: string; detail: string }> = {
     label: "Trained agent",
     detail: "Circuit + trained decision network",
   },
-  "silenced connectome": {
-    label: "Circuit silenced",
-    detail: "Same network, all circuit activity set to zero",
+  "direct readout 8-12-3 (no connectome)": {
+    label: "No connectome, 147 weights",
+    detail:
+      "8 game inputs straight into an 8-12-3 network, trained the same way",
+  },
+  "direct readout 8-20-3 (no connectome)": {
+    label: "No connectome, 243 weights",
+    detail:
+      "8 game inputs straight into an 8-20-3 network, trained the same way",
+  },
+  "circuit output zeroed": {
+    label: "Circuit output zeroed",
+    detail: "Same network, no game information reaches it",
   },
   "untrained readout": {
     label: "Untrained network",
@@ -96,13 +106,14 @@ export function TrainingBench({
         (p, i) => `${i ? "L" : "M"}${chartX(p.generation)},${chartY(p[key])}`,
       )
       .join(" ");
-  const highlights = benchmark?.results.filter((r) =>
-    [
-      "connectome + trained readout",
-      "silenced connectome",
-      "untrained readout",
-    ].includes(r.name),
-  );
+  const highlights = [
+    "connectome + trained readout",
+    "direct readout 8-20-3 (no connectome)",
+    "circuit output zeroed",
+    "untrained readout",
+  ]
+    .flatMap((name) => benchmark?.results.find((r) => r.name === name) ?? [])
+    .slice(0, 3);
   return (
     <section className="training-bench" aria-labelledby="training-title">
       <div className="bench-heading">
@@ -400,16 +411,19 @@ export function TrainingBench({
               </table>
             </div>
             <p className="result-note">
-              Silencing removes the circuit’s activity while keeping the trained
-              decision network. This comparison tests whether the agent depends
-              on the circuit; it does not establish biological accuracy or an
-              advantage over other network structures.
+              Zeroing the circuit output leaves the trained network with a
+              constant input, so it receives no information about the game. That
+              control shows the information pathway is needed, not that the
+              circuit’s computation helps. The no-connectome networks see the
+              same eight game inputs directly and are trained with the same
+              budget; they use the published training seed. Ten training runs
+              per controller are compared in the replicate file.
             </p>
           </>
         ) : (
           <p className="training-empty" role="status">
             {busy === "benchmark"
-              ? "Evaluating the current model on 100 unseen courses and five control conditions. Results will appear when all runs finish."
+              ? "Evaluating the current model on 100 unseen courses alongside the control conditions. Results will appear when all runs finish."
               : busy === "train"
                 ? "Training is running. Stop or finish the run, then evaluate the saved model on unseen courses."
                 : !model
@@ -427,7 +441,7 @@ export function TrainingBench({
           Training log
         </a>
         <a href="/benchmarks/replicates.json" download>
-          Three independent training runs
+          Ten training runs per controller
         </a>
         <a href="/benchmarks/benchmark.json" download>
           Evaluation

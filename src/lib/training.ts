@@ -1,6 +1,14 @@
 import { Connectome } from "./connectome.ts";
 import { createRunner, tickRunner, RUNNER, score } from "./runner.ts";
-import { NETWORK, decide, actionInput, type Model } from "./policy.ts";
+import {
+  CONTROLLERS,
+  NETWORK,
+  decide,
+  decideDirect,
+  actionInput,
+  type ControllerKind,
+  type Model,
+} from "./policy.ts";
 export const TRAINING = {
   population: 64,
   elites: 8,
@@ -17,9 +25,12 @@ export function rng(seed: number) {
     return (s + 0.5) / 4294967296;
   };
 }
-export function randomWeights(random: () => number) {
+export function randomWeights(
+  random: () => number,
+  kind: ControllerKind = "connectome",
+) {
   return Array.from(
-    { length: NETWORK.parameters },
+    { length: CONTROLLERS[kind].parameters },
     () => gaussian(random) * 0.7,
   );
 }
@@ -39,9 +50,10 @@ export function episode(
   seed: number,
   seconds: number,
   baseline: "rule" | "idle" | "random" | "ablated" = "idle",
+  kind: ControllerKind = "connectome",
 ): Episode {
   const s = createRunner(seed),
-    brain = new Connectome(),
+    brain = kind === "connectome" ? new Connectome() : null,
     r = rng(seed),
     actions = [0, 0, 0];
   const steps = Math.round(seconds / RUNNER.step);
@@ -49,7 +61,9 @@ export function episode(
   for (let i = 0; i < steps && !s.dead; i++) {
     if (i % NETWORK.decisionSteps === 0) {
       action = weights
-        ? decide(weights, s, brain, baseline === "ablated").action
+        ? brain
+          ? decide(weights, s, brain, baseline === "ablated").action
+          : decideDirect(weights, s, CONTROLLERS[kind]).action
         : baseline === "random"
           ? Math.floor(r() * 3)
           : 0;
@@ -80,6 +94,7 @@ export type Progress = {
 /** Cross-entropy neuroevolution. No scripted actions, labels, or teacher policy. */
 export class Trainer {
   seed: number;
+  kind: ControllerKind;
   random: () => number;
   mean: number[];
   sigma: number[];
@@ -87,14 +102,15 @@ export class Trainer {
   episodes = 0;
   champion: Model;
   history: Omit<Progress, "model">[] = [];
-  constructor(seed = 20260912) {
+  constructor(seed = 20260912, kind: ControllerKind = "connectome") {
     this.seed = seed;
+    this.kind = kind;
     this.random = rng(seed);
-    this.mean = Array(NETWORK.parameters).fill(0);
-    this.sigma = Array(NETWORK.parameters).fill(0.8);
+    this.mean = Array(CONTROLLERS[kind].parameters).fill(0);
+    this.sigma = Array(CONTROLLERS[kind].parameters).fill(0.8);
     this.champion = {
-      version: NETWORK.version,
-      weights: randomWeights(this.random),
+      version: CONTROLLERS[kind].version,
+      weights: randomWeights(this.random, kind),
       generation: 0,
       trainingSeed: seed,
       validation: 0,
@@ -114,14 +130,16 @@ export class Trainer {
           : this.mean.map((m, k) => m + this.sigma[k] * gaussian(this.random));
       const fitness = average(
         seeds.map(
-          (seed) => episode(weights, seed, TRAINING.courseSeconds).score,
+          (seed) =>
+            episode(weights, seed, TRAINING.courseSeconds, "idle", this.kind)
+              .score,
         ),
       );
       this.episodes += seeds.length;
       return { weights, fitness };
     }).sort((a, b) => b.fitness - a.fitness);
     const elite = population.slice(0, TRAINING.elites);
-    for (let k = 0; k < NETWORK.parameters; k++) {
+    for (let k = 0; k < this.mean.length; k++) {
       const mean = average(elite.map((e) => e.weights[k]));
       const deviation = Math.sqrt(
         average(elite.map((e) => (e.weights[k] - mean) ** 2)),
@@ -133,13 +151,19 @@ export class Trainer {
     const validation = average(
       TRAINING.validationSeeds.map(
         (seed) =>
-          episode(candidate.weights, seed, TRAINING.validationSeconds).score,
+          episode(
+            candidate.weights,
+            seed,
+            TRAINING.validationSeconds,
+            "idle",
+            this.kind,
+          ).score,
       ),
     );
     this.episodes += TRAINING.validationSeeds.length;
     if (validation > this.champion.validation)
       this.champion = {
-        version: NETWORK.version,
+        version: CONTROLLERS[this.kind].version,
         weights: candidate.weights.slice(),
         generation,
         trainingSeed: this.seed,

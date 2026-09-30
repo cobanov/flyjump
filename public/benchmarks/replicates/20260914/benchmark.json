@@ -253,6 +253,7 @@
   "environment": "flydino-chromium98-connectome-v2",
   "modelGeneration": 33,
   "trainingSeed": 20260914,
+  "direct": [],
   "config": {
     "seconds": 180,
     "seeds": [
@@ -1670,7 +1671,7 @@
       ]
     },
     {
-      "name": "silenced connectome",
+      "name": "circuit output zeroed",
       "courses": 100,
       "survived": 0,
       "meanSeconds": 4.5084999999999935,

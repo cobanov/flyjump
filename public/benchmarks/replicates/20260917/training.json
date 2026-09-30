@@ -1,0 +1,582 @@
+{
+  "algorithm": "CEM neuroevolution",
+  "controller": "connectome",
+  "seed": 20260917,
+  "config": {
+    "population": 64,
+    "elites": 8,
+    "generations": 80,
+    "courseSeconds": 180,
+    "trainingCourses": 3,
+    "validationSeeds": [
+      1100001,
+      1100002,
+      1100003,
+      1100004
+    ],
+    "validationSeconds": 180
+  },
+  "wallSeconds": 1661.066923291,
+  "history": [
+    {
+      "generation": 1,
+      "episodes": 196,
+      "bestFitness": 65.66666666666667,
+      "meanFitness": 42,
+      "validation": 65.25
+    },
+    {
+      "generation": 2,
+      "episodes": 392,
+      "bestFitness": 58,
+      "meanFitness": 41.578125,
+      "validation": 65.25
+    },
+    {
+      "generation": 3,
+      "episodes": 588,
+      "bestFitness": 61,
+      "meanFitness": 41.89062500000001,
+      "validation": 68.75
+    },
+    {
+      "generation": 4,
+      "episodes": 784,
+      "bestFitness": 86.33333333333333,
+      "meanFitness": 43.265625,
+      "validation": 68.75
+    },
+    {
+      "generation": 5,
+      "episodes": 980,
+      "bestFitness": 84,
+      "meanFitness": 43.546875,
+      "validation": 68.75
+    },
+    {
+      "generation": 6,
+      "episodes": 1176,
+      "bestFitness": 192.66666666666666,
+      "meanFitness": 46.671875,
+      "validation": 206.5
+    },
+    {
+      "generation": 7,
+      "episodes": 1372,
+      "bestFitness": 225.33333333333334,
+      "meanFitness": 46.843750000000014,
+      "validation": 206.5
+    },
+    {
+      "generation": 8,
+      "episodes": 1568,
+      "bestFitness": 236.66666666666666,
+      "meanFitness": 45.906249999999986,
+      "validation": 206.5
+    },
+    {
+      "generation": 9,
+      "episodes": 1764,
+      "bestFitness": 206,
+      "meanFitness": 45.44270833333333,
+      "validation": 206.5
+    },
+    {
+      "generation": 10,
+      "episodes": 1960,
+      "bestFitness": 253,
+      "meanFitness": 47.28645833333334,
+      "validation": 206.5
+    },
+    {
+      "generation": 11,
+      "episodes": 2156,
+      "bestFitness": 236,
+      "meanFitness": 46.53645833333333,
+      "validation": 206.5
+    },
+    {
+      "generation": 12,
+      "episodes": 2352,
+      "bestFitness": 230.66666666666666,
+      "meanFitness": 46.083333333333336,
+      "validation": 206.5
+    },
+    {
+      "generation": 13,
+      "episodes": 2548,
+      "bestFitness": 212.66666666666666,
+      "meanFitness": 49.41666666666667,
+      "validation": 206.5
+    },
+    {
+      "generation": 14,
+      "episodes": 2744,
+      "bestFitness": 397,
+      "meanFitness": 53.32291666666667,
+      "validation": 336.25
+    },
+    {
+      "generation": 15,
+      "episodes": 2940,
+      "bestFitness": 1225.3333333333333,
+      "meanFitness": 68.56770833333333,
+      "validation": 336.25
+    },
+    {
+      "generation": 16,
+      "episodes": 3136,
+      "bestFitness": 297.3333333333333,
+      "meanFitness": 50.10416666666669,
+      "validation": 336.25
+    },
+    {
+      "generation": 17,
+      "episodes": 3332,
+      "bestFitness": 364.6666666666667,
+      "meanFitness": 55.91145833333334,
+      "validation": 336.25
+    },
+    {
+      "generation": 18,
+      "episodes": 3528,
+      "bestFitness": 341.3333333333333,
+      "meanFitness": 59.104166666666686,
+      "validation": 336.25
+    },
+    {
+      "generation": 19,
+      "episodes": 3724,
+      "bestFitness": 298.3333333333333,
+      "meanFitness": 58.182291666666664,
+      "validation": 336.25
+    },
+    {
+      "generation": 20,
+      "episodes": 3920,
+      "bestFitness": 724.6666666666666,
+      "meanFitness": 71.88541666666669,
+      "validation": 733
+    },
+    {
+      "generation": 21,
+      "episodes": 4116,
+      "bestFitness": 797.6666666666666,
+      "meanFitness": 82.81770833333333,
+      "validation": 733
+    },
+    {
+      "generation": 22,
+      "episodes": 4312,
+      "bestFitness": 1276.3333333333333,
+      "meanFitness": 122.0520833333333,
+      "validation": 1099.75
+    },
+    {
+      "generation": 23,
+      "episodes": 4508,
+      "bestFitness": 1238.6666666666667,
+      "meanFitness": 155.21354166666669,
+      "validation": 1099.75
+    },
+    {
+      "generation": 24,
+      "episodes": 4704,
+      "bestFitness": 1170,
+      "meanFitness": 209.7760416666666,
+      "validation": 1099.75
+    },
+    {
+      "generation": 25,
+      "episodes": 4900,
+      "bestFitness": 2604.6666666666665,
+      "meanFitness": 318.40104166666674,
+      "validation": 1370.25
+    },
+    {
+      "generation": 26,
+      "episodes": 5096,
+      "bestFitness": 2333.6666666666665,
+      "meanFitness": 390.54166666666663,
+      "validation": 2355.5
+    },
+    {
+      "generation": 27,
+      "episodes": 5292,
+      "bestFitness": 2520.6666666666665,
+      "meanFitness": 557.4687499999999,
+      "validation": 2355.5
+    },
+    {
+      "generation": 28,
+      "episodes": 5488,
+      "bestFitness": 2118.6666666666665,
+      "meanFitness": 500.6354166666663,
+      "validation": 2355.5
+    },
+    {
+      "generation": 29,
+      "episodes": 5684,
+      "bestFitness": 2448.6666666666665,
+      "meanFitness": 552.8749999999999,
+      "validation": 2355.5
+    },
+    {
+      "generation": 30,
+      "episodes": 5880,
+      "bestFitness": 2307.3333333333335,
+      "meanFitness": 593.4114583333333,
+      "validation": 2355.5
+    },
+    {
+      "generation": 31,
+      "episodes": 6076,
+      "bestFitness": 2750.6666666666665,
+      "meanFitness": 818.869791666667,
+      "validation": 2766.25
+    },
+    {
+      "generation": 32,
+      "episodes": 6272,
+      "bestFitness": 2898,
+      "meanFitness": 786.46875,
+      "validation": 2898
+    },
+    {
+      "generation": 33,
+      "episodes": 6468,
+      "bestFitness": 2898,
+      "meanFitness": 686.6614583333338,
+      "validation": 2898
+    },
+    {
+      "generation": 34,
+      "episodes": 6664,
+      "bestFitness": 2898,
+      "meanFitness": 1057.0052083333328,
+      "validation": 2898
+    },
+    {
+      "generation": 35,
+      "episodes": 6860,
+      "bestFitness": 2898,
+      "meanFitness": 1187.8385416666667,
+      "validation": 2898
+    },
+    {
+      "generation": 36,
+      "episodes": 7056,
+      "bestFitness": 2898,
+      "meanFitness": 1028.0468750000002,
+      "validation": 2898
+    },
+    {
+      "generation": 37,
+      "episodes": 7252,
+      "bestFitness": 2898,
+      "meanFitness": 1158.0052083333333,
+      "validation": 2898
+    },
+    {
+      "generation": 38,
+      "episodes": 7448,
+      "bestFitness": 2898,
+      "meanFitness": 1360.6979166666663,
+      "validation": 2898
+    },
+    {
+      "generation": 39,
+      "episodes": 7644,
+      "bestFitness": 2898,
+      "meanFitness": 1536.557291666666,
+      "validation": 2898
+    },
+    {
+      "generation": 40,
+      "episodes": 7840,
+      "bestFitness": 2898,
+      "meanFitness": 1383.817708333333,
+      "validation": 2898
+    },
+    {
+      "generation": 41,
+      "episodes": 8036,
+      "bestFitness": 2898,
+      "meanFitness": 1316.0625000000002,
+      "validation": 2898
+    },
+    {
+      "generation": 42,
+      "episodes": 8232,
+      "bestFitness": 2898,
+      "meanFitness": 1299.9010416666667,
+      "validation": 2898
+    },
+    {
+      "generation": 43,
+      "episodes": 8428,
+      "bestFitness": 2898,
+      "meanFitness": 1452.9062500000002,
+      "validation": 2898
+    },
+    {
+      "generation": 44,
+      "episodes": 8624,
+      "bestFitness": 2898,
+      "meanFitness": 1558.9479166666667,
+      "validation": 2898
+    },
+    {
+      "generation": 45,
+      "episodes": 8820,
+      "bestFitness": 2898,
+      "meanFitness": 1451.6770833333335,
+      "validation": 2898
+    },
+    {
+      "generation": 46,
+      "episodes": 9016,
+      "bestFitness": 2898,
+      "meanFitness": 1305.3489583333337,
+      "validation": 2898
+    },
+    {
+      "generation": 47,
+      "episodes": 9212,
+      "bestFitness": 2898,
+      "meanFitness": 1668.703125,
+      "validation": 2898
+    },
+    {
+      "generation": 48,
+      "episodes": 9408,
+      "bestFitness": 2898,
+      "meanFitness": 1577.4479166666658,
+      "validation": 2898
+    },
+    {
+      "generation": 49,
+      "episodes": 9604,
+      "bestFitness": 2898,
+      "meanFitness": 1587.296875,
+      "validation": 2898
+    },
+    {
+      "generation": 50,
+      "episodes": 9800,
+      "bestFitness": 2898,
+      "meanFitness": 1533.9635416666667,
+      "validation": 2898
+    },
+    {
+      "generation": 51,
+      "episodes": 9996,
+      "bestFitness": 2898,
+      "meanFitness": 1468.5364583333337,
+      "validation": 2898
+    },
+    {
+      "generation": 52,
+      "episodes": 10192,
+      "bestFitness": 2898,
+      "meanFitness": 1749.348958333333,
+      "validation": 2898
+    },
+    {
+      "generation": 53,
+      "episodes": 10388,
+      "bestFitness": 2898,
+      "meanFitness": 966.2447916666671,
+      "validation": 2898
+    },
+    {
+      "generation": 54,
+      "episodes": 10584,
+      "bestFitness": 2898,
+      "meanFitness": 1455.1718749999998,
+      "validation": 2898
+    },
+    {
+      "generation": 55,
+      "episodes": 10780,
+      "bestFitness": 2898,
+      "meanFitness": 1444.078125000001,
+      "validation": 2898
+    },
+    {
+      "generation": 56,
+      "episodes": 10976,
+      "bestFitness": 2898,
+      "meanFitness": 1453.8177083333342,
+      "validation": 2898
+    },
+    {
+      "generation": 57,
+      "episodes": 11172,
+      "bestFitness": 2898,
+      "meanFitness": 1490.9583333333337,
+      "validation": 2898
+    },
+    {
+      "generation": 58,
+      "episodes": 11368,
+      "bestFitness": 2898,
+      "meanFitness": 1375.770833333333,
+      "validation": 2898
+    },
+    {
+      "generation": 59,
+      "episodes": 11564,
+      "bestFitness": 2898,
+      "meanFitness": 1604.1093749999995,
+      "validation": 2898
+    },
+    {
+      "generation": 60,
+      "episodes": 11760,
+      "bestFitness": 2898,
+      "meanFitness": 1638.6093749999998,
+      "validation": 2898
+    },
+    {
+      "generation": 61,
+      "episodes": 11956,
+      "bestFitness": 2898,
+      "meanFitness": 1501.4270833333333,
+      "validation": 2898
+    },
+    {
+      "generation": 62,
+      "episodes": 12152,
+      "bestFitness": 2898,
+      "meanFitness": 1495.9114583333328,
+      "validation": 2898
+    },
+    {
+      "generation": 63,
+      "episodes": 12348,
+      "bestFitness": 2898,
+      "meanFitness": 1282.0624999999998,
+      "validation": 2898
+    },
+    {
+      "generation": 64,
+      "episodes": 12544,
+      "bestFitness": 2898,
+      "meanFitness": 1708.041666666667,
+      "validation": 2898
+    },
+    {
+      "generation": 65,
+      "episodes": 12740,
+      "bestFitness": 2898,
+      "meanFitness": 1542.8281249999993,
+      "validation": 2898
+    },
+    {
+      "generation": 66,
+      "episodes": 12936,
+      "bestFitness": 2898,
+      "meanFitness": 1314.3854166666665,
+      "validation": 2898
+    },
+    {
+      "generation": 67,
+      "episodes": 13132,
+      "bestFitness": 2898,
+      "meanFitness": 1415.1614583333335,
+      "validation": 2898
+    },
+    {
+      "generation": 68,
+      "episodes": 13328,
+      "bestFitness": 2898,
+      "meanFitness": 1266.1093750000005,
+      "validation": 2898
+    },
+    {
+      "generation": 69,
+      "episodes": 13524,
+      "bestFitness": 2898,
+      "meanFitness": 1441.7864583333337,
+      "validation": 2898
+    },
+    {
+      "generation": 70,
+      "episodes": 13720,
+      "bestFitness": 2898,
+      "meanFitness": 1485.2812500000002,
+      "validation": 2898
+    },
+    {
+      "generation": 71,
+      "episodes": 13916,
+      "bestFitness": 2898,
+      "meanFitness": 1330.8593749999998,
+      "validation": 2898
+    },
+    {
+      "generation": 72,
+      "episodes": 14112,
+      "bestFitness": 2898,
+      "meanFitness": 1324.8385416666663,
+      "validation": 2898
+    },
+    {
+      "generation": 73,
+      "episodes": 14308,
+      "bestFitness": 2898,
+      "meanFitness": 1383.9374999999995,
+      "validation": 2898
+    },
+    {
+      "generation": 74,
+      "episodes": 14504,
+      "bestFitness": 2898,
+      "meanFitness": 1279.901041666667,
+      "validation": 2898
+    },
+    {
+      "generation": 75,
+      "episodes": 14700,
+      "bestFitness": 2898,
+      "meanFitness": 1193.3125000000002,
+      "validation": 2898
+    },
+    {
+      "generation": 76,
+      "episodes": 14896,
+      "bestFitness": 2898,
+      "meanFitness": 1268.3229166666656,
+      "validation": 2898
+    },
+    {
+      "generation": 77,
+      "episodes": 15092,
+      "bestFitness": 2898,
+      "meanFitness": 1177.078125,
+      "validation": 2898
+    },
+    {
+      "generation": 78,
+      "episodes": 15288,
+      "bestFitness": 2898,
+      "meanFitness": 956.5312499999999,
+      "validation": 2898
+    },
+    {
+      "generation": 79,
+      "episodes": 15484,
+      "bestFitness": 2898,
+      "meanFitness": 1065.2031249999998,
+      "validation": 2898
+    },
+    {
+      "generation": 80,
+      "episodes": 15680,
+      "bestFitness": 2898,
+      "meanFitness": 1431.0729166666665,
+      "validation": 2898
+    }
+  ]
+}
