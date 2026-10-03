@@ -4,9 +4,9 @@ Recorded 2026-09-12. Environment ID: `flydino-chromium98-connectome-v2`.
 
 ## Question and scope
 
-Can a trainable readout learn the original Dino task when its only inputs are the computed activities of a small, measured MaleCNS circuit? Does removing that circuit's activity destroy the trained behavior?
+Can a trainable readout learn the original Dino task when its only inputs are the computed activities of a small, measured MaleCNS circuit? How does it compare with the same kind of readout trained on the game observations directly, with no circuit at all?
 
-This experiment demonstrates numerical learning and a real causal computation path. It does **not** test whether biological topology is better than an equally sized artificial or rewired network. It does not model the entire brain, measured electrophysiology, muscles, learning in a living animal, or plasticity of biological synapses.
+This experiment demonstrates numerical learning and a real causal computation path. The direct-input control (added after publication, see [below](#direct-input-control-no-connectome)) shows the task can be solved as well without the connectome. The experiment does **not** test whether biological topology is better than an equally sized artificial or rewired recurrent network. It does not model the entire brain, measured electrophysiology, muscles, learning in a living animal, or plasticity of biological synapses.
 
 ## Original environment
 
@@ -75,7 +75,16 @@ Diagonal Gaussian cross-entropy method, independently implemented from the stand
 - Every generation's best training candidate is evaluated on validation seeds **1100001–1100004**, 180 seconds each. Champion replaced only on strictly improved mean validation score.
 - **15,680 episodes per run**: 80 × (64 × 3 + 4). Published training time: 456.33 seconds on the development Mac mini (not a portable performance guarantee).
 
-Only readout weights change. The biological-edge graph, recurrence and encoder remain fixed. Normal gameplay runs inference only. Browser training performs genuine candidate rollouts in a Web Worker; the visible game uses the current validation champion. Stop terminates the worker and retains its latest checkpoint.
+Only readout weights change. The biological-edge graph, recurrence and encoder remain fixed. Additional connectome seeds **20260915–20260921** were declared and trained with the same settings when the direct-input control was added, giving ten runs per controller. Normal gameplay runs inference only. Browser training performs genuine candidate rollouts in a Web Worker; the visible game uses the current validation champion. Stop terminates the worker and retains its latest checkpoint.
+
+## Direct-input control (no connectome)
+
+Proposed by Ben Caunt in [issue #1](https://github.com/cobanov/flyjump/issues/1), who first ran it in [his fork](https://github.com/BenCaunt/flyjump/blob/d2e69a46f13b694db5550921eb4b433fc46e0fe3/analysis/experiments/direct-input/FINDINGS.md). The controller receives the eight observations directly, each encoded as `2 * (feature - 0.5)`: exactly the drive the circuit's input cells receive. There is no circuit, recurrence or hidden state between decisions. Two widths are trained:
+
+- **8 → 12 tanh → 3**, 147 parameters: the connectome readout's hidden width. This matches the network in Ben Caunt's fork, which reached it by folding the same encoding into the weights after a validation-only input-scaling sweep. Here the encoding is fixed in advance, so no scaling search was run.
+- **8 → 20 tanh → 3**, 243 parameters: the connectome readout's parameter count, so CEM searches a space of the same dimension. With the same training seed this arm also consumes the random stream identically, so it faces the same training courses in every generation as the connectome run.
+
+Everything else is unchanged: CEM settings, 80 generations, 15,680 episodes per run, validation seeds and checkpoint rule, 30 Hz decisions and the held-out test seeds. Ten predeclared training seeds, **20260912–20260921**, were run for each width before any direct controller was evaluated on test courses. `npm run train -- 20260912 80 --controller=direct-8-12-3` writes to `public/benchmarks/direct/8-12-3/20260912`.
 
 ## Held-out evaluation
 
@@ -84,25 +93,46 @@ Exactly **100 test seeds: 2100001–2100100**, each capped at 180 seconds. These
 | Controller | Completed / 100 | Mean survival | Mean original score |
 | --- | ---: | ---: | ---: |
 | Connectome + trained readout | **99** | **179.372 s** | **2885.75** |
-| Same readout, circuit silenced | 0 | 4.5085 s | 41.00 |
+| Direct readout 8-12-3, no connectome (147 parameters) | 92 | 176.888 s | 2837.34 |
+| Direct readout 8-20-3, no connectome (243 parameters) | 100 | 180.000 s | 2898.00 |
+| Same connectome readout, circuit output zeroed | 0 | 4.5085 s | 41.00 |
 | Initial untrained readout | 0 | 4.4918 s | 41.00 |
 | Handwritten rule baseline | 0 | 46.4927 s | 535.27 |
 | Uniform random actions at 30 Hz | 0 | 4.6622 s | 42.77 |
 | Idle | 0 | 4.5085 s | 41.00 |
 
-Published champion: **generation 32**, validation score **2591.75**. The run continues to generation 80 without replacing that champion. The handwritten rule baseline is a simple, untuned distance threshold; it is not a strong optimized controller. Do not interpret this table as outperforming all rule-based methods.
+Published champion: **generation 32**, validation score **2591.75**. The run continues to generation 80 without replacing that champion. The direct rows use the direct checkpoints from the same first declared seed, 20260912, not chosen by test score.
 
-[Per-course benchmark](../public/benchmarks/benchmark.json) includes actions, jumps, ducks, deaths and exact checkpoint. [Training history](../public/benchmarks/training.json) records every generation. [Replicas](../public/benchmarks/replicates.json) report all three training runs on the **same** held-out courses; those are not 300 independent courses. All per-replica models, logs and results are published. A topology-benefit claim would require matched artificial/rewired controls trained with equal budgets; that study is not included.
+**What the zeroed-output control shows.** It was previously labeled "silenced connectome". Zeroing clears the circuit state and returns 16 zeros, and those zeros are the readout's only input. The feed-forward readout therefore sees one constant input and chooses one constant action: it pressed Jump on all 13,551 of its decisions and survived exactly as long as Idle. The 99 versus 0 comparison establishes that the readout needs information from the game to arrive through the circuit. It does **not** show that the circuit's computation, or fly-specific connectivity, adds anything over the raw observations; the direct-input control addresses that question.
+
+The handwritten rule baseline is a simple, untuned distance threshold; it is not a strong optimized controller. Do not interpret this table as outperforming all rule-based methods.
+
+[Per-course benchmark](../public/benchmarks/benchmark.json) includes actions, jumps, ducks, deaths and exact checkpoint. [Training history](../public/benchmarks/training.json) records every generation. [Replicas](../public/benchmarks/replicates.json) report all ten training runs per controller on the **same** held-out courses; those are not 1,000 independent courses. All per-replica models, logs and results are published. A topology-benefit claim would require matched artificial/rewired recurrent controls trained with equal budgets; that study is not included.
 
 ### Independent training replicas
 
-| Training seed | Selected generation | Validation score | Completed / 100 | Mean survival |
-| --- | ---: | ---: | ---: | ---: |
-| 20260912 (published) | 32 | 2591.75 | 99 | 179.372 s |
-| 20260913 | 46 | 2898.00 | 85 | 174.396 s |
-| 20260914 | 33 | 2898.00 | 100 | 180.000 s |
+Ten training runs per controller, identical budget, each evaluated on the same 100 held-out courses. Cells show completed courses out of 100 and the selected generation; validation score is 2898.00 (the four-course maximum) unless noted.
 
-Across these three seeds the completion range is **85–100/100**. The second seed has a perfect four-course validation score but lower held-out completion; this shows why validation and test results are reported separately. There was no test-based checkpoint selection. Three runs remain a small sample.
+| Training seed | Connectome + readout | Direct 8-12-3 | Direct 8-20-3 |
+| --- | ---: | ---: | ---: |
+| 20260912 (published) | 99 (gen. 32, val. 2591.75) | 92 (gen. 55) | 100 (gen. 24) |
+| 20260913 | 85 (gen. 46) | 100 (gen. 18) | 100 (gen. 20) |
+| 20260914 | 100 (gen. 33) | 5 (gen. 79, val. 1176.00) | 95 (gen. 32) |
+| 20260915 | 87 (gen. 42) | 98 (gen. 23) | 98 (gen. 32) |
+| 20260916 | 92 (gen. 52) | 88 (gen. 44) | 95 (gen. 26) |
+| 20260917 | 99 (gen. 32) | 95 (gen. 10) | 79 (gen. 31) |
+| 20260918 | 97 (gen. 51) | 89 (gen. 30) | 100 (gen. 18) |
+| 20260919 | 96 (gen. 23) | 84 (gen. 19) | 100 (gen. 33) |
+| 20260920 | 78 (gen. 29) | 86 (gen. 28) | 56 (gen. 52) |
+| 20260921 | 89 (gen. 30) | 47 (gen. 73, val. 2517.50) | 99 (gen. 18) |
+| **Mean completed** | **92.2** | **78.4** | **92.2** |
+| Median / range | 94 / 78–100 | 88.5 / 5–100 | 98.5 / 56–100 |
+| Runs with at least 95 | 5 of 10 | 3 of 10 | 8 of 10 |
+| Mean survival | 174.90 s | 163.64 s | 171.37 s |
+
+The parameter-matched direct controller (8-20-3) has the same mean completion as the connectome controller across ten seeds, with a higher median and a wider spread. The 147-parameter direct controller is less reliable: two of its runs never reached a perfect validation score within 80 generations, and one completed only 5 courses. No run of any arm was excluded. Several runs have a perfect four-course validation score but lower held-out completion, which is why validation and test results are reported separately. There was no test-based checkpoint selection.
+
+These are ten training runs per arm on shared test courses, not 1,000 independent courses, and no significance test is claimed. The results do not support a claim that the connectome improves performance or training reliability on this engineered-state task, and they do not show that it harms it. Matched random or degree-preserving rewired circuits, which would isolate the contribution of fly-specific topology from that of any fixed recurrent layer, have not been trained.
 
 ## Rebuilding data and code
 
@@ -119,7 +149,7 @@ npm run build:chromium
 npm run check:assets
 ```
 
-The data builder rejects unexpected source hashes. The Chromium generator rebuilds a wrapper around unchanged vendored files; asset checks verify pinned source, sprites, graph and anatomical asset hashes. `npm test` reproduces the main benchmark, tests deterministic learning, input sensitivity and silencing, graph reachability, key transitions, original collision geometry and rendered/headless parity.
+The data builder rejects unexpected source hashes. The Chromium generator rebuilds a wrapper around unchanged vendored files; asset checks verify pinned source, sprites, graph and anatomical asset hashes. `npm test` reproduces the main benchmark (including both direct-input rows), tests deterministic learning, input sensitivity, zeroed circuit output, the direct controllers' input encoding, graph reachability, key transitions, original collision geometry and rendered/headless parity.
 
 ## Prior version
 

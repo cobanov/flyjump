@@ -1,29 +1,305 @@
 {
-  "note": "Same protocol and predeclared seeds. Published checkpoint is the first seed, not selected using test performance. Test courses overlap across replicas; these are 3 training runs, not 300 independent test courses.",
-  "results": [
+  "note": "Same protocol, CEM budget and predeclared training seeds for every controller. The published connectome checkpoint is the first seed, not selected using test performance. Test courses are shared across runs; each arm is 10 training runs on the same 100 courses, not 1,000 independent test courses.",
+  "seeds": [
+    20260912,
+    20260913,
+    20260914,
+    20260915,
+    20260916,
+    20260917,
+    20260918,
+    20260919,
+    20260920,
+    20260921
+  ],
+  "arms": [
     {
-      "seed": 20260912,
-      "generation": 32,
-      "validation": 2591.75,
-      "survived": 99,
-      "meanSeconds": 179.37199999998705,
-      "meanScore": 2885.75
+      "controller": "connectome",
+      "name": "connectome + trained readout",
+      "parameters": 243,
+      "summary": {
+        "runs": 10,
+        "meanSurvived": 92.2,
+        "medianSurvived": 94,
+        "minSurvived": 78,
+        "maxSurvived": 100,
+        "runsAtLeast95": 5,
+        "meanSeconds": 174.8999166666547
+      },
+      "results": [
+        {
+          "seed": 20260912,
+          "generation": 32,
+          "validation": 2591.75,
+          "survived": 99,
+          "meanSeconds": 179.37199999998705,
+          "meanScore": 2885.75
+        },
+        {
+          "seed": 20260913,
+          "generation": 46,
+          "validation": 2898,
+          "survived": 85,
+          "meanSeconds": 174.39633333332299,
+          "meanScore": 2788.7
+        },
+        {
+          "seed": 20260914,
+          "generation": 33,
+          "validation": 2898,
+          "survived": 100,
+          "meanSeconds": 179.99999999998678,
+          "meanScore": 2898
+        },
+        {
+          "seed": 20260915,
+          "generation": 42,
+          "validation": 2898,
+          "survived": 87,
+          "meanSeconds": 176.00549999998887,
+          "meanScore": 2820.08
+        },
+        {
+          "seed": 20260916,
+          "generation": 52,
+          "validation": 2898,
+          "survived": 92,
+          "meanSeconds": 171.92999999998793,
+          "meanScore": 2746.05
+        },
+        {
+          "seed": 20260917,
+          "generation": 32,
+          "validation": 2898,
+          "survived": 99,
+          "meanSeconds": 178.63466666665357,
+          "meanScore": 2873.78
+        },
+        {
+          "seed": 20260918,
+          "generation": 51,
+          "validation": 2898,
+          "survived": 97,
+          "meanSeconds": 177.2654999999873,
+          "meanScore": 2845.71
+        },
+        {
+          "seed": 20260919,
+          "generation": 23,
+          "validation": 2898,
+          "survived": 96,
+          "meanSeconds": 177.63849999998737,
+          "meanScore": 2853.02
+        },
+        {
+          "seed": 20260920,
+          "generation": 29,
+          "validation": 2898,
+          "survived": 78,
+          "meanSeconds": 158.25516666665672,
+          "meanScore": 2489.06
+        },
+        {
+          "seed": 20260921,
+          "generation": 30,
+          "validation": 2898,
+          "survived": 89,
+          "meanSeconds": 175.50149999998857,
+          "meanScore": 2812.05
+        }
+      ]
     },
     {
-      "seed": 20260913,
-      "generation": 46,
-      "validation": 2898,
-      "survived": 85,
-      "meanSeconds": 174.39633333332299,
-      "meanScore": 2788.7
+      "controller": "direct-8-12-3",
+      "name": "direct readout 8-12-3 (no connectome)",
+      "parameters": 147,
+      "summary": {
+        "runs": 10,
+        "meanSurvived": 78.4,
+        "medianSurvived": 88.5,
+        "minSurvived": 5,
+        "maxSurvived": 100,
+        "runsAtLeast95": 3,
+        "meanSeconds": 163.63859999999016
+      },
+      "results": [
+        {
+          "seed": 20260912,
+          "generation": 55,
+          "validation": 2898,
+          "survived": 92,
+          "meanSeconds": 176.88799999998835,
+          "meanScore": 2837.34
+        },
+        {
+          "seed": 20260913,
+          "generation": 18,
+          "validation": 2898,
+          "survived": 100,
+          "meanSeconds": 179.99999999998678,
+          "meanScore": 2898
+        },
+        {
+          "seed": 20260914,
+          "generation": 79,
+          "validation": 1176,
+          "survived": 5,
+          "meanSeconds": 96.96183333333558,
+          "meanScore": 1364.29
+        },
+        {
+          "seed": 20260915,
+          "generation": 23,
+          "validation": 2898,
+          "survived": 98,
+          "meanSeconds": 179.76833333332027,
+          "meanScore": 2893.47
+        },
+        {
+          "seed": 20260916,
+          "generation": 44,
+          "validation": 2898,
+          "survived": 88,
+          "meanSeconds": 176.37033333332195,
+          "meanScore": 2827.21
+        },
+        {
+          "seed": 20260917,
+          "generation": 10,
+          "validation": 2898,
+          "survived": 95,
+          "meanSeconds": 178.15349999998764,
+          "meanScore": 2862.04
+        },
+        {
+          "seed": 20260918,
+          "generation": 30,
+          "validation": 2898,
+          "survived": 89,
+          "meanSeconds": 176.71933333332188,
+          "meanScore": 2833.93
+        },
+        {
+          "seed": 20260919,
+          "generation": 19,
+          "validation": 2898,
+          "survived": 84,
+          "meanSeconds": 175.2706666666559,
+          "meanScore": 2805.64
+        },
+        {
+          "seed": 20260920,
+          "generation": 28,
+          "validation": 2898,
+          "survived": 86,
+          "meanSeconds": 175.86749999998895,
+          "meanScore": 2817.38
+        },
+        {
+          "seed": 20260921,
+          "generation": 73,
+          "validation": 2517.5,
+          "survived": 47,
+          "meanSeconds": 120.38649999999441,
+          "meanScore": 1833.34
+        }
+      ]
     },
     {
-      "seed": 20260914,
-      "generation": 33,
-      "validation": 2898,
-      "survived": 100,
-      "meanSeconds": 179.99999999998678,
-      "meanScore": 2898
+      "controller": "direct-8-20-3",
+      "name": "direct readout 8-20-3 (no connectome)",
+      "parameters": 243,
+      "summary": {
+        "runs": 10,
+        "meanSurvived": 92.2,
+        "medianSurvived": 98.5,
+        "minSurvived": 56,
+        "maxSurvived": 100,
+        "runsAtLeast95": 8,
+        "meanSeconds": 171.365049999988
+      },
+      "results": [
+        {
+          "seed": 20260912,
+          "generation": 24,
+          "validation": 2898,
+          "survived": 100,
+          "meanSeconds": 179.99999999998678,
+          "meanScore": 2898
+        },
+        {
+          "seed": 20260913,
+          "generation": 20,
+          "validation": 2898,
+          "survived": 100,
+          "meanSeconds": 179.99999999998678,
+          "meanScore": 2898
+        },
+        {
+          "seed": 20260914,
+          "generation": 32,
+          "validation": 2898,
+          "survived": 95,
+          "meanSeconds": 177.98766666665438,
+          "meanScore": 2858.8
+        },
+        {
+          "seed": 20260915,
+          "generation": 32,
+          "validation": 2898,
+          "survived": 98,
+          "meanSeconds": 179.4266666666538,
+          "meanScore": 2886.8
+        },
+        {
+          "seed": 20260916,
+          "generation": 26,
+          "validation": 2898,
+          "survived": 95,
+          "meanSeconds": 178.2699999999878,
+          "meanScore": 2864.22
+        },
+        {
+          "seed": 20260917,
+          "generation": 31,
+          "validation": 2898,
+          "survived": 79,
+          "meanSeconds": 147.4094999999897,
+          "meanScore": 2348.45
+        },
+        {
+          "seed": 20260918,
+          "generation": 18,
+          "validation": 2898,
+          "survived": 100,
+          "meanSeconds": 179.99999999998678,
+          "meanScore": 2898
+        },
+        {
+          "seed": 20260919,
+          "generation": 33,
+          "validation": 2898,
+          "survived": 100,
+          "meanSeconds": 179.99999999998678,
+          "meanScore": 2898
+        },
+        {
+          "seed": 20260920,
+          "generation": 52,
+          "validation": 2898,
+          "survived": 56,
+          "meanSeconds": 131.48433333332673,
+          "meanScore": 2061.94
+        },
+        {
+          "seed": 20260921,
+          "generation": 18,
+          "validation": 2898,
+          "survived": 99,
+          "meanSeconds": 179.07233333332027,
+          "meanScore": 2880.29
+        }
+      ]
     }
   ]
 }

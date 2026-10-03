@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Add trained direct-input controls with no connectome (8-12-3, 147 parameters; 8-20-3, 243 parameters), proposed by Ben Caunt in issue #1. They receive the same eight observations with the drive the circuit's input cells get, and use the same CEM budget.
+- Train ten predeclared seeds per controller (seven new connectome seeds) and report every run on the same 100 held-out courses.
+- Rename the silenced condition to "circuit output zeroed" and state that it only removes game information from the readout.
+
 ## 0.2.0 · 2026-09-12
 
 - Rename the public experiment Fly Dino and use flydino.cobanov.dev.
